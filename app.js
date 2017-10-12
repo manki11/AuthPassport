@@ -33,7 +33,7 @@ app.get("/", function (req, res) {
     res.render("home");
 });
 
-app.get("/secret", function (req, res) {
+app.get("/secret", isLoggedIn, function (req, res) {
     res.render("secret");
 })
 
@@ -70,6 +70,20 @@ app.post("/login",passport.authenticate("local",{
 }) ,function (req, res) {
 
 });
+
+//LOGOUT ROUTE
+
+app.get("/logout", function (req, res) {
+    req.logOut();
+    res.redirect("/");
+});
+
+function isLoggedIn(req,res,next) {
+    if(req.isAuthenticated()){
+        return next();
+    }
+    res.redirect("/login");
+}
 
 app.listen(4000, function () {
     console.log("Auth app is online");
