@@ -22,6 +22,7 @@ app.use(require("express-session")({
 app.use(passport.initialize());
 app.use(passport.session());
 
+passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
@@ -38,6 +39,7 @@ app.get("/secret", function (req, res) {
 
 // AUTH ROUTES
 
+// REGISTER ROUTES
 app.get("/register", function (req, res) {
     res.render("register");
 });
@@ -55,6 +57,19 @@ app.post("/register", function (req, res) {
     });
 });
 
+
+// LOGIN ROUTES
+
+app.get("/login", function (req, res) {
+    res.render("login");
+});
+
+app.post("/login",passport.authenticate("local",{
+    successRedirect:"/secret",
+    failiureRedirect:"/login"
+}) ,function (req, res) {
+
+});
 
 app.listen(4000, function () {
     console.log("Auth app is online");
